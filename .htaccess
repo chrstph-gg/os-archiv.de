@@ -1,0 +1,16 @@
+ErrorDocument 404 /404.html
+
+
+# Sicherstellen, dass mod_rewrite aktiviert ist und .htaccess benutzt wird
+# (AllowOverride All in vhost erforderlich)
+
+RewriteEngine On
+
+# 1) Internes Rewriting: /seite -> /seite.html (Browser-URL bleibt /seite)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z0-9\-_]+)/?$ $1.html [L]
+
+# 2) Optional: kanonisch weiterleiten von /seite.html -> /seite (301)
+RewriteCond %{THE_REQUEST} \s/([^\s?]+)\.html[?\s] [NC]
+RewriteRule ^([A-Za-z0-9\-_]+)\.html$ /$1 [R=301,L]
